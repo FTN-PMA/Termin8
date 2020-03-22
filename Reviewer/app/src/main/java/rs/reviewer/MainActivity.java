@@ -1,16 +1,9 @@
 package rs.reviewer;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,12 +13,19 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import model.NavItem;
 import rs.reviewer.adapters.DrawerListAdapter;
 import rs.reviewer.dialogs.LocationDialog;
 import rs.reviewer.fragments.MapFragment;
 import rs.reviewer.tools.FragmentTransition;
-
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,15 +37,6 @@ public class MainActivity extends AppCompatActivity {
     private CharSequence mTitle;
     private ArrayList<NavItem> mNavItems = new ArrayList<NavItem>();
     private AlertDialog dialog;
-
-    private String synctime;
-    private boolean allowSync;
-    private String lookupRadius;
-
-    private boolean allowReviewNotif;
-    private boolean allowCommentedNotif;
-    private SharedPreferences sharedPreferences;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         // enable ActionBar app icon to behave as action to toggle nav drawer
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        final ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -112,20 +103,6 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             selectItemFromDrawer(0);
         }
-
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        
-    }
-
-    private void consultPreferences(){
-        synctime = sharedPreferences.getString(getString(R.string.pref_sync_list), "1");//1min
-        allowSync = sharedPreferences.getBoolean(getString(R.string.pref_sync), false);
-
-        lookupRadius = sharedPreferences.getString(getString(R.string.pref_radius), "1");//1km
-
-        allowCommentedNotif = sharedPreferences.getBoolean(getString(R.string.notif_on_my_comment_key), false);
-        allowReviewNotif = sharedPreferences.getBoolean(getString(R.string.notif_on_my_review_key), false);
-
     }
 
     private void showLocatonDialog(){
@@ -146,8 +123,6 @@ public class MainActivity extends AppCompatActivity {
     	super.onResume();
 
         showLocatonDialog();
-
-        consultPreferences();
     }
     
     private void prepareMenu(ArrayList<NavItem> mNavItems ){
